@@ -1,0 +1,40 @@
+#!/bin/bash
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+PURPLE="\e[35m"
+LBLUE="\e[36m"
+DEF="\e[0m"
+
+
+echo `date` >>/tmp/vykl &
+
+/home/actions/vykl_plis
+
+
+for srv in `seq 1 16`
+    do
+	echo -e "${PURPLE}Execution on ${RED}srv${srv}${DEF}:${GREEN}"
+	/home/actions/powermodule.pl srv${srv} off &
+    done
+
+sleep 120
+
+umount /common
+umount /home
+
+sleep 10 
+
+/home/actions/vykl_other
+sleep 10 
+
+servers="raid23 main"
+for server in $servers
+    do  
+    sleep 5
+	echo -e "${PURPLE}Execution on ${RED}${server}${DEF}:${GREEN}"
+	/home/actions/powermodule.pl ${server} off &
+    done
+    
+
